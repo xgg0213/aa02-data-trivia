@@ -13,6 +13,11 @@ For example, it should return:
 
 function listAllCitiesWithCountries(climateData) {
     // Your code here 
+    let names = [];
+    for (let el of climateData) {
+        names.push(el.city + ', ' + el.country);
+    }
+    return names;
 }
 
 // console.log(listAllCitiesWithCountries(climateData));
@@ -32,6 +37,14 @@ For example, it should return:
 
 function listAllUsCities(climateData) {
     // Your code here 
+    let names = [];
+
+    for (let el of climateData) {
+        if (el.country === 'United States') {
+            names.push(el.city + ', ' + el.country);
+        }
+    }
+    return names;
 }
 
 // console.log(listAllUsCities(climateData));
@@ -51,12 +64,22 @@ was duplicated in id 3, 7, and 9, the returned object should look like:
 
 
 function findDuplicates(climateData) {
-    // Your code here 
+    // Your code here
+    let list = {};
+    
+    for (let i = 0; i < climateData.length; i++) {
+        let keys = Object.keys(list);
+        if (!keys.includes(climateData[i].city)) {
+            list[climateData[i].city]=[climateData[i].id]
+        } else {
+            list[climateData[i].city].push(climateData[i].id)
+        }
+    }
+    return list;
+
 }
 
 // console.log(findDuplicates(climateData));
-
-
 
 /* 04. `returnDuplicate` Which city object should be corrected in
 the data set?
@@ -74,6 +97,20 @@ but do not have to, use this method to solve this problem.
 
 function returnDuplicate(climateData) {
     // Your code here 
+    let cityList = findDuplicates(climateData);
+    let values = Object.values(cityList);
+    let keys = Object.keys(cityList);
+
+    let index = 0;
+    for (let i = 0; i < values.length; i++) {
+        if (values[i].length>1) {
+            index = i;
+            i = values.length;
+        }
+    }
+    let idNum = cityList[keys[index]][cityList[keys[index]].length-1];
+    let cityName = keys[index];
+    return climateData.find(el => el.id === idNum && el.city === cityName)
 }
 
 // console.log(returnDuplicate(climateData));
@@ -94,6 +131,22 @@ HINT: Can you use functions you have already written to help solve this problem?
 
 function correctDuplicate(climateData, newCityName) {
     // Your code here 
+    let keyObject = returnDuplicate(climateData);
+    // option 1: use the traditional for loop
+    // let res = {}
+    // for (let i = 0; i < climateData.length; i++) {
+    //     if (climateData[i].city === keyObject.city && climateData[i].id === keyObject.id) {
+    //         res = climateData[i];
+    //         res.city = newCityName;
+    //         i = climateData.length;
+    //     }
+    // }
+    // return res;
+
+    // option 2: use the find function
+    let res = climateData.find(el => el.city === keyObject.city && el.id === keyObject.id);
+    res.city = newCityName;
+    return res;
 }
 
 // console.log(correctDuplicate(climateData, "Peoria IL"));

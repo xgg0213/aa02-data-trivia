@@ -23,9 +23,36 @@ Hint: How can you identify and access the correct data for a month such as
 
 function leastRainfall(climateData, month) {
     // Your code here 
+    let mList = ['January','Februray', 'March', 'April','May', 'June','July','August'
+    ,'September','October','November','December'];
+
+    let mIndex = 0;
+    mList.forEach(el => {
+        if (el === month) {mIndex = mList.indexOf(el)}
+    })
+
+    let res = climateData.filter(el => {
+        return el.monthlyAvg[mIndex].rainfall < 10
+    })
+
+    let final = [];
+    res.forEach(el => {
+        let city_name = el.city + ', ' + el.country;
+        let rainfallM = el.monthlyAvg[mIndex].rainfall.toString()[0] + ' mm';
+        final.push({city_name, rainfallM});
+        //the below method works: city here is considered a string, same is country
+        // final.push({city: el.city, country: el.country });
+    })
+    // return final;
+    let finalList = [];
+
+    final.forEach(el => finalList.push(Object.values(el)[0] + ': ' + Object.values(el)[1]))
+    return finalList;
+
+    
 }
 
-// console.log(leastRainfall(climateData, "August"));
+console.log(leastRainfall(climateData, "August"));
 
 
 
